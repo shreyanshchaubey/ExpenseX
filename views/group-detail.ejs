@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>
+        <%= group.name %> - Cash Flow Minimizer</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <div class="container">
+        <nav>
+            <a href="/dashboard" class="back-link">← Back to Dashboard</a>
+            <div class="user-info">
+                <span>Welcome, <%= user.name %></span>
+                <a href="/logout" class="btn-small">Logout</a>
+            </div>
+        </nav>
+
+        <div class="group-detail">
+            <div class="group-header">
+                <h1>
+                    <%= group.name %>
+                </h1>
+                <button onclick="showModal('addExpenseModal')" class="btn">Add Expense</button>
+            </div>
+
+            <div class="group-content">
+                <!-- Members Section -->
+                <div class="members-section">
+                    <h2>Members</h2>
+                    <div class="members-list">
+                        <% members.forEach(member => { %>
+                            <div class="member-item">
+                                <span><%= member.name %></span>
+                                <span class="email"><%= member.email %></span>
+                            </div>
+                            <% }); %>
+                    </div>
+                </div>
+
+                <!-- Expenses Section -->
+                <div class="expenses-section">
+                    <h2>Expenses</h2>
+                    <div class="expenses-list">
+                        <% if (expenses && expenses.length > 0) { %>
+                            <% expenses.forEach(expense => { %>
+                                <div class="expense-item">
+                                    <div class="expense-header">
+                                        <h3>
+                                            <%= expense.description %>
+                                        </h3>
+                                        <span class="amount">$<%= expense.amount %></span>
+                                    </div>
+                                    <div class="expense-details">
+                                        <p>Paid by:
+                                            <%= expense.paid_by_name %>
+                                        </p>
+                                        <div class="shares">
+                                            <p>Shared between:</p>
+                                            <% expense.shares.forEach(share => { %>
+                                                <span><%= share.name %>: $<%= share.share_amount %></span>
+                                                <% }); %>
+                                        </div>
+                                    </div>
+                                </div>
+                                <% }); %>
+                                    <% } else { %>
+                                        <p class="no-data">No expenses added yet.</p>
+                                        <% } %>
+                    </div>
+                </div>
+
+                <!-- Settlements Section -->
+                <div class="settlements-section">
+                    <h2>Settlements</h2>
+                    <div class="settlements-list">
+                        <% if (settlements && settlements.length > 0) { %>
+                            <% settlements.forEach(settlement => { %>
+                                <div class="settlement-item">
+                                    <p>
+                                        <%= settlement.from %> should pay $
+                                            <%= settlement.amount %> to
+                                                <%= settlement.to %>
+                                    </p>
+                                </div>
+                                <% }); %>
+                                    <% } else { %>
+                                        <p class="no-data">No settlements needed.</p>
+                                        <% } %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Expense Modal -->
+    <div id="addExpenseModal" class="modal">
+        <div class="modal-content">
+            <h2>Add Expense</h2>
+            <form action="/groups/<%= group.id %>/expenses/add" method="POST">
+                <div class="form-group">
+                    <label for="description">Description:</label>
+                    <input type="text" id="description" name="description" required>
+                </div>
+                <div class="form-group">
+                    <label for="amount">Amount:</label>
+                    <input type="number" id="amount" name="amount" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label>Split Between:</label>
+                    <div class="member-checkboxes">
+                        <% members.forEach(member => { %>
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="participants" value="<%= member.id %>" 
+                                       <%= member.id === user.id ? 'checked' : '' %>>
+                                <%= member.name %>
+                            </label>
+                            <% }); %>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="button" onclick="hideModal('addExpenseModal')" class="btn-secondary">Cancel</button>
+                    <button type="submit" class="btn">Add Expense</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function showModal(modalId) {
+            document.getElementById(modalId).style.display = 'block';
+        }
+
+        function hideModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            if (event.target.className === 'modal') {
+                event.target.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+
+</html>

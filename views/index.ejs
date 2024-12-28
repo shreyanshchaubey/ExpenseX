@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cash Flow Minimizer</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to Cash Flow Minimizer</h1>
+        <% if (user) { %>
+            <p>Welcome back, <%= user.name %>!</p>
+            <a href="/dashboard" class="btn">Go to Dashboard</a>
+            <a href="/logout" class="btn">Logout</a>
+        <% } else { %>
+            <div class="auth-buttons">
+                <a href="/login" class="btn">Login</a>
+                <a href="/register" class="btn">Register</a>
+            </div>
+            <div class="features">
+                <h2>Features</h2>
+                <ul>
+                    <li>Create groups for different occasions (trips, parties, etc.)</li>
+                    <li>Add expenses and split them equally</li>
+                    <li>Smart settlement suggestions to minimize transactions</li>
+                    <li>Track who owes what to whom</li>
+                    <li>Easy-to-use interface</li>
+                </ul>
+            </div>
+        <% } %>
+    </div>
+</body>
+</html>

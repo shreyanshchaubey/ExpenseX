@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard - Cash Flow Minimizer</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <nav>
+            <h1>Dashboard</h1>
+            <div class="user-info">
+                <span>Welcome, <%= user.name %></span>
+                <a href="/logout" class="btn-small">Logout</a>
+            </div>
+        </nav>
+
+        <div class="dashboard-content">
+            <div class="groups-section">
+                <div class="section-header">
+                    <h2>My Groups</h2>
+                    <button onclick="showModal('createGroupModal')" class="btn">Create New Group</button>
+                </div>
+
+                <div class="groups-list">
+                    <% if (groups && groups.length > 0) { %>
+                        <% groups.forEach(group => { %>
+                            <div class="group-card">
+                                <h3><%= group.name %></h3>
+                                <div class="group-stats">
+                                    <p>Members: <%= group.member_count %></p>
+                                    <p>Total Expenses: $<%= group.total_expenses || 0 %></p>
+                                </div>
+                                <div class="group-actions">
+                                    <a href="/groups/<%= group.id %>" class="btn">View Details</a>
+                                </div>
+                            </div>
+                        <% }); %>
+                    <% } else { %>
+                        <p class="no-data">You haven't created or joined any groups yet.</p>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Group Modal -->
+    <div id="createGroupModal" class="modal">
+        <div class="modal-content">
+            <h2>Create New Group</h2>
+            <form action="/groups/create" method="POST">
+                <div class="form-group">
+                    <label for="name">Group Name:</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="members">Member Emails (comma-separated):</label>
+                    <input type="text" id="members" name="members" placeholder="friend@example.com, another@example.com">
+                </div>
+                <div class="form-actions">
+                    <button type="button" onclick="hideModal('createGroupModal')" class="btn-secondary">Cancel</button>
+                    <button type="submit" class="btn">Create</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function showModal(modalId) {
+            document.getElementById(modalId).style.display = 'block';
+        }
+
+        function hideModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            if (event.target.className === 'modal') {
+                event.target.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
