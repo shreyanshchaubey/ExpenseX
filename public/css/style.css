@@ -155,6 +155,8 @@ nav {
     width: 70%;
     max-width: 500px;
     border-radius: 8px;
+    max-height: 80vh; /* Set maximum height to 80% of the viewport height */
+    overflow-y: auto; /* Enable vertical scrolling */
 }
 
 /* Checkboxes */
